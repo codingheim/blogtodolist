@@ -5,7 +5,7 @@ from pymongo import MongoClient
 import certifi
 
 ca = certifi.where()
-client = MongoClient('mongodb://songsooyong:<sparta>@cluster0-shard-00-00.oce1s.mongodb.net:27017,cluster0-shard-00-01.oce1s.mongodb.net:27017,cluster0-shard-00-02.oce1s.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-fc9srx-shard-0&authSource=admin&retryWrites=true&w=majority', tlsCAFile=ca)
+client = MongoClient('mongodb://songsooyong:ausehskf4$@cluster0-shard-00-00.oce1s.mongodb.net:27017,cluster0-shard-00-01.oce1s.mongodb.net:27017,cluster0-shard-00-02.oce1s.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-fc9srx-shard-0&authSource=admin&retryWrites=true&w=majority', tlsCAFile=ca)
 db = client.dbsparta
 
 @app.route('/')
