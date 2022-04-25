@@ -1,222 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <link rel="stylesheet" href="../static/calendarstyle.css"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+            integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"
+            integrity="sha512-uto9mlQzrs59VwILcLiRYeLKPPbS/bT71da/OEBYEwcdNUk8jYIy+D176RYoop1Da+f9mvkYrmj5MCLZWEtQuA=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css"
+          integrity="sha512-aOG0c6nPNzGk+5zjwyJaoRUgCdOrfSDhmMID2u4+OIslr0GjpLKo7Xm0Ao3xmpM4T8AmIouRkqwj1nrdVsLKEQ=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
 </head>
-<style>
-    a {
-        text-decoration: none;
-        font-size: 14px;
-        color: #333;
-    }
-
-    li {
-        list-style: none;
-        display: flex;
-
-        margin-bottom: 10px;
-    }
-
-
-    .calendar-template {
-        border: 1px solid dimgray;
-        border-radius: 20px;
-
-        max-width: 800px;
-        width: 100%;
-        height: 250px;
-
-        margin: auto 0;
-    }
-
-    .months {
-        max-width: 800px;
-        width: 100%;
-        height: 30px;
-        display: flex;
-
-    }
-
-    .days {
-        max-width: 800px;
-        width: 100%;
-        height: 250px;
-
-
-
-    }
-
-    .day-label {
-        display: flex;
-
-        height: 12px;
-    }
-
-    .oneday {
-        width: 10px;
-        height: 10px;
-        border: 1px solid red;
-
-        margin: auto;
-    }
-    .moreInfo {
-        display: flex;
-        height: 30px;
-    }
-    .perImoji {
-        margin-left: 360px;
-    }
-</style>
-
 <script>
+    $(document).ready(function () {
+        percent_check();
+    });
 
+    function percent_check() {
+        $.ajax({
+            type: "GET",
+            url: "/todo/calendar",
+            data: {},
+            success: function (response) {
+                console.log(response['todos'])
+
+                let donelist = 91
+                let totallist = 100
+                let done_percent = donelist / totallist * 100
+
+                let twenty_temp = `<div class="percentage_shape0" title="20%입니다.">🖤</div>`
+                let forty_temp = `<div class="percentage_shape1" title="40%입니다.">🤎</div>`
+                let sixty_temp = `<div class="percentage_shape2" title="60%입니다.">💛</div>`
+                let eighty_temp = `<div class="percentage_shape3" title="80%입니다.">💙</div>`
+                let hundred_temp = `<div class="percentage_shape4" title="100%입니다.">💖</div>`
+
+                if (done_percent <= 20) {
+                    $('#onedays-box').append(twenty_temp)
+                } else if (done_percent <= 40) {
+                    $('#onedays-box').append(forty_temp)
+                } else if (done_percent <= 60) {
+                    $('#onedays-box').append(sixty_temp)
+                } else if (done_percent <= 90) {
+                    $('#onedays-box').append(eighty_temp)
+                } else {
+                    $('#onedays-box').append(hundred_temp)
+                }
+                alert(Math.ceil(done_percent) + '% 완료하였습니다.')
+
+            }
+        });
+    }
+
+    function donepercent() {
+        $.ajax({
+            type: 'POST',
+            url: '/todo/calendar',
+            data: {
+                date_give: date,
+                num_give: num,
+                todo_give: todo,
+                done_give: done,
+            },
+            success: function (response) {
+                alert(response['msg'])
+                window.location.reload()
+            }
+        });
+    }
 </script>
 <body>
-
-<section class="calendar-template">
-<!--    MONTH-->
-    <article class="months">
-        <ul class="month">
-            <li class="month-label">Apr</li>
-        </ul>
-        <ul class="month">
-            <li class="month-label">May</li>
-        </ul>
-    </article>
-
-<!--    DAY-->
-    <article class="days">
-        <ul>
-            <li class="day-label">월
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-            </li>
-        </ul>
-
-        <ul>
-            <li class="day-label">화
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-                <div class="oneday"></div>
-            </li>
-            <li class="day-label">수
-                <div class="oneday"></div>
-            </li>
-            <li class="day-label">목
-                <div class="oneday"></div>
-            </li>
-            <li class="day-label">금
-                <div class="oneday"></div>
-            </li>
-            <li class="day-label">토
-                <div class="oneday"></div>
-            </li>
-            <li class="day-label">일
-                <div class="oneday"></div>
-            </li>
-        </ul>
-    <section class="moreInfo">
-        <p>
-            <a href="#todo" style="margin-left: 10px">오늘 하루 플랜을 조회하러 가볼까요?</a>
-        </p>
-        <p class="perImoji" title="완료된 퍼센티지를 보여줍니다.">Less</p>
-            <p title="20%완료">🖤</p>
-            <p title="40%완료">🤎</p>
-            <p title="60%완료">💛</p>
-            <p title="80%완료">💙</p>
-            <p title="100%완료">💖</p>
-        <p class="perImoji2" title="완료된 퍼센티지를 보여줍니다.">More</p>
-
-    </section>
-    </article>
-
-</section>
+<div class="calendarWrap">
+    <div class="monthsContainer">
+        <div class="months">
+            <div class="month">
+                4월
+            </div>
+        </div>
+    </div>
+    <div class="daysContainer">
+        <div class="days">
+            <div class="day">
+                월요일
+            </div>
+            <div class="day">
+                화요일
+            </div>
+            <div class="day">
+                수요일
+            </div>
+            <div class="day">
+                목요일
+            </div>
+            <div class="day">
+                금요일
+            </div>
+            <div class="day">
+                토요일
+            </div>
+            <div class="day">
+                일요일
+            </div>
+        </div>
+        <div class="onedayContainer">
+            <div class="onedays" id="onedays-box">
+                <div class="oneday"></div>
+            </div>
+        </div>
+    </div>
+    <div class="calendarFooter">
+        <div class="review">
+            <p class="showtodo">오늘의 계획을 확인해보세요!</p>
+        </div>
+        <div class="percent_info">
+            <div class="percentage">
+                LESS
+                <div class="percentage_shape0">🖤</div>
+                <div class="percentage_shape1">🤎</div>
+                <div class="percentage_shape2">💛</div>
+                <div class="percentage_shape3">💙</div>
+                <div class="percentage_shape4">💖</div>
+                MORE
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
