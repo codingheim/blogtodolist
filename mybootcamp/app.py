@@ -14,36 +14,6 @@ def home():
 def teaminfo():
   return render_template('teaminfo.html')
 
-@app.route('/createteam')
-def createteam():
-  return render_template('createteam.html')
-
-@app.route('/nationalteam')
-def nationalteam():
-  return render_template('nationalteam.html')
-
-@app.route('/nationalteam')
-def national_cheer_post():
-  nickname_receive = request.form['nickname_give']
-  player_receive = request.form['player_give']
-  comment_receive = request.form['comment_give']
-
-  doc = {
-    'nickname': nickname_receive,
-    'player':player_receive,
-    'comment':comment_receive
-  }
-
-  db.nationalteam.insert_one(doc)
-
-  return jsonify({'msg':'응원 완료!'})
-
-@app.route('/nationalteam', methods=["GET"])
-def national_cheer_get():
-  national_cheer_list = list(db.nationalteam.find({},{'_id' : False}))
-  return jsonify({'players': national_cheer_list})
-
-
 @app.route('/player', methods=["POST"])
 def player_post():
   name_receive = request.form['name_give']
@@ -65,6 +35,61 @@ def player_post():
 def player_get():
   player_list = list(db.playersinfo.find({},{'_id' : False}))
   return jsonify({'players': player_list})
+
+
+@app.route('/createteam')
+def createteam():
+  return render_template('createteam.html')
+
+@app.route('/registerteam', methods=['POST'])
+def team_post():
+  name_receive = request.form['name_give']
+  people_receive = request.form['people_give']
+  age_receive = request.form['age_give']
+  league_receive = request.form['league_give']
+  tellnum_receive = request.form['tellnum_give']
+
+  doc = {
+    'name':name_receive,
+    'people':people_receive,
+    'age':age_receive,
+    'league':league_receive,
+    'tellnum':tellnum_receive
+  }
+  db.createteam.insert_one(doc)
+  return jsonify({'msg':'팀등록 완료!'})
+
+@app.route('/registerteam', methods=['GET'])
+def team_get():
+  team_list = list(db.createteam.find({}, {'_id': False}))
+  return jsonify({'team': team_list})
+
+
+@app.route('/nationalteam')
+def nationalteam():
+  return render_template('nationalteam.html')
+
+@app.route('/teamcheer' ,methods=['POST'])
+def national_cheer_post():
+  nickname_receive = request.form['nickname_give']
+  player_receive = request.form['player_give']
+  comment_receive = request.form['comment_give']
+
+  doc = {
+    'nickname': nickname_receive,
+    'player': player_receive,
+    'comment': comment_receive
+  }
+
+  db.nationalteam.insert_one(doc)
+
+  return jsonify({'msg':'응원 완료!'})
+
+@app.route('/teamcheer', methods=["GET"])
+def national_cheer_get():
+  national_cheer_list = list(db.nationalteam.find({},{'_id' : False}))
+  return jsonify({'cheer_list': national_cheer_list})
+
 
 if __name__ == '__main__':
   app.run('0.0.0.0', port=5000, debug=True)

@@ -55,10 +55,10 @@
             $('#cheer-box').empty()
             $.ajax({
                 type: 'GET',
-                url: '/nationalteam',
+                url: '/teamcheer',
                 data: {},
                 success: function (response) {
-                    let rows = response['cheers']
+                    let rows = response['cheer_list']
                     for (let i = 0; i < rows.length; i++) {
                         let nickname = rows[i]['nickname']
                         let player = rows[i]['player']
@@ -82,8 +82,8 @@
 
             $.ajax({
                 type: 'POST',
-                url: '/nationalteam',
-                data: {nickname_give: nickname, player_give:player, comment_give: comment},
+                url: '/teamcheer',
+                data: {nickname_give:nickname, player_give:player, comment_give:comment},
                 success: function (response) {
                     alert(response['msg'])
                     window.location.reload()
@@ -121,7 +121,7 @@
                 <option value="GK">MF김진규</option>
                 <option value="GK">MF나상호</option>
                 <option value="GK">MF백승호</option>
-                <option value="GK">MF손흥민</option>
+                <option value="손흥민">MF손흥민</option>
                 <option value="GK">MF송민규</option>
                 <option value="GK">MF이재성</option>
                 <option value="GK">MF정우영(알사드)</option>
@@ -148,7 +148,7 @@
         <thead>
         <tr>
             <th scope="col">닉네임</th>
-            <th scope="col">선수명</th>
+            <th scope="col">응원해요!</th>
             <th scope="col">코멘트</th>
         </tr>
         </thead>

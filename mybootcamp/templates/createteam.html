@@ -48,44 +48,55 @@
 
     <script>
         $(document).ready(function () {
-            show_order();
+            show_team();
         });
-        function show_order() {
-            $('#order-box').empty()
-            $.ajax ({
-                type : 'GET',
-                url : '/player',
-                data : {},
-                success : function (response) {
-                    let rows = response['orders']
+
+        function show_team() {
+            $('#team-box').empty()
+            $.ajax({
+                type: 'GET',
+                url: '/registerteam',
+                data: {},
+                success: function (response) {
+                    let rows = response['team']
                     for (let i = 0; i < rows.length; i++) {
                         let name = rows[i]['name']
-                        let address = rows[i]['address']
-                        let position = rows[i]['position']
+                        let people = rows[i]['people']
+                        let age = rows[i]['age']
+                        let league = rows[i]['league']
                         let tellnum = rows[i]['tellnum']
 
                         let temp_html = `<tr>
                                             <td>${name}</td>
-                                            <td>${address}</td>
-                                            <td>${position}</td>
+                                            <td>${people}</td>
+                                            <td>${age}</td>
+                                            <td>${league}</td>
                                             <td>${tellnum}</td>
                                         </tr>`
-                        $('#order-box').append(temp_html)
+                        $('#team-box').append(temp_html)
                     }
                 }
             });
         }
-        function save_order() {
+
+        function save_team() {
             let name = $('#name').val()
-            let address = $('#address').val()
-            let position = $('#position').val()
+            let people = $('#people').val()
+            let age = $('#age').val()
+            let league = $('#league').val()
             let tellnum = $('#tellnum').val()
 
             $.ajax({
-                type:'POST',
-                url :'/player',
-                data : {name_give: name, address_give:address, position_give : position, tellnum_give:tellnum},
-                success : function (response) {
+                type: 'POST',
+                url: '/registerteam',
+                data: {
+                    name_give: name,
+                    people_give: people,
+                    age_give: age,
+                    league_give: league,
+                    tellnum_give: tellnum
+                },
+                success: function (response) {
                     alert(response['msg'])
                     window.location.reload()
                 }
@@ -96,47 +107,58 @@
 <body>
 <div class="mask"></div>
 <div class="order">
-    <h1>회원등록</h1>
-    <h3>선수관리</h3>
+    <h1>팀등록</h1>
+    <h3>리그를 선택해주세요!</h3>
     <p>
-        잘되는 팀의 기본! 팀원 관리<br/>
-        상대팀을 꺽고, 최종 우승팀으로 발돋움 하세요.
+        다양한 리그 경기를 위한 팀등록!<br/>
+        지인과 함께 다양한 리그 경기를 즐겨보세요!
     </p>
     <div class="order-info">
         <div class="input-group mb-3">
-            <span class="input-group-text">이름</span>
+            <span class="input-group-text">팀이름</span>
             <input id="name" type="text" class="form-control">
         </div>
         <div class="input-group mb-3">
-            <span class="input-group-text">주소</span>
-            <input id="address" type="text" class="form-control">
+            <span class="input-group-text">인원</span>
+            <input id="people" type="text" class="form-control">
         </div>
         <div class="input-group mb-3">
-            <label class="input-group-text" for="position">포지션</label>
-            <select class="form-select" id="position">
-                <option selected>-- 포지션 --</option>
-                <option value="FW">FW</option>
-                <option value="MF">MF</option>
-                <option value="DF">DF</option>
-                <option value="GK">GK</option>
+            <label class="input-group-text" for="age">연령대</label>
+            <select class="form-select" id="age">
+                <option selected>-- 연령 --</option>
+                <option value="FW">20대</option>
+                <option value="MF">30대</option>
+                <option value="DF">40대</option>
+                <option value="GK">전연령</option>
+            </select>
+        </div>
+        <div class="input-group mb-3">
+            <label class="input-group-text" for="league">리그</label>
+            <select class="form-select" id="league">
+                <option selected>--리그선택 --</option>
+                <option value="Junior">Junior</option>
+                <option value="Senior">Senior</option>
+                <option value="Single">Single</option>
+                <option value="Nomal">Nomal</option>
             </select>
         </div>
         <div class="input-group mb-3">
             <span class="input-group-text">핸드폰번호</span>
             <input id="tellnum" type="text" class="form-control">
         </div>
-        <button onclick="save_order()" type="button" class="btn btn-warning mybtn">선수등록</button>
+        <button onclick="save_team()" type="button" class="btn btn-warning mybtn">팀등록</button>
     </div>
     <table class="table">
         <thead>
         <tr>
             <th scope="col">이름</th>
-            <th scope="col">주소</th>
-            <th scope="col">포지션</th>
-            <th scope="col" >핸드폰번호</th>
+            <th scope="col">인원</th>
+            <th scope="col">연령대</th>
+            <th scope="col">리그선택</th>
+            <th scope="col">핸드폰번호</th>
         </tr>
         </thead>
-        <tbody id="order-box">
+        <tbody id="team-box">
         </tbody>
     </table>
 </div>
